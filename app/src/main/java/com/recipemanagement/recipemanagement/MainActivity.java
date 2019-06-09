@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if(item.getItemId() == R.id.add_recipe){
-            Intent intent = new Intent(getApplicationContext(), addActivity.class);
+            Intent intent = new Intent(getApplicationContext(), AddActivity.class);
             startActivity(intent);
         }
 
