@@ -33,12 +33,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(item.getItemId() == R.id.search_recipe){
-            Intent intent = new Intent(getApplicationContext(), searchActivity.class);
+            Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
             startActivity(intent);
         }
 
         if(item.getItemId() == R.id.delete_recipe){
-            Intent intent = new Intent(getApplicationContext(), deleteActivity.class);
+            Intent intent = new Intent(getApplicationContext(), DeleteActivity.class);
             startActivity(intent);
         }
 
