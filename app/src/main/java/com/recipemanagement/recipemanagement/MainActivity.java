@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private final String baseUrl = "https://recipe-management-service.herokuapp.com/getRecipes";
     private ListView listView;
 
-    public static SwipeRefreshLayout pullToRefresh;
+
     private ArrayAdapter adapter;
     ArrayList<String> listItems=new ArrayList<String>();
     ArrayList<String> itemIds=new ArrayList<String>();
@@ -84,18 +84,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setTitle("Yemek Tarifleri");
         setContentView(R.layout.activity_main);
         new JsonTask().execute();
-        pullToRefresh = findViewById(R.id.pullToRefresh);
+
         listView = (ListView)findViewById(R.id.listView);//eklenen recipeler listelenmesi icin
         listView.setOnItemClickListener(this);
-        SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
-        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                adapter.clear();
-                new JsonTask().execute();
-                MainActivity.pullToRefresh.setRefreshing(false);
-            }
-        });
+
 
 
 

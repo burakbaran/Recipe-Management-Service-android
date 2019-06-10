@@ -5,10 +5,12 @@ import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -20,12 +22,16 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class AddActivity extends AppCompatActivity {
 
     private JSONArray tag = new JSONArray();
     private Button updateOrCreateEvent, addTagToRecipe;
-    private LinearLayout tagPlaces;
+    private ListView tagLists;
+    private ArrayAdapter adapter;
+    private ArrayList<String> listItems=new ArrayList<String>(); // getten gelen tagler string
+
 
     private EditText name, description, tags;
     private final String baseUrl = "https://recipe-management-service.herokuapp.com/addRecipe";
@@ -42,15 +48,22 @@ public class AddActivity extends AppCompatActivity {
         name = findViewById(R.id.recipeName);
         description = findViewById(R.id.recipeDescription);
         tags = findViewById(R.id.recipeTags);
+        tagLists = findViewById(R.id.tagLists);
 
         addTagToRecipe = findViewById(R.id.addTag);
-        tagPlaces = findViewById(R.id.linear);
+
+
+
+        adapter = new ArrayAdapter< String >
+                (AddActivity.this, android.R.layout.simple_list_item_1,listItems);
+        tagLists.setAdapter(adapter);
 
         addTagToRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tag.put(tags.getText().toString());
-                createTags(tags.getText().toString());
+                listItems.add(tags.getText().toString());
+                adapter.notifyDataSetChanged();
                 tags.getText().clear();
             }
         });
@@ -91,13 +104,6 @@ public class AddActivity extends AppCompatActivity {
                 AddActivity.this.startActivity(activity);
             }
         });
-    }
-    public void createTags(String text){
-        EditText temp = new EditText(this);
-        temp.setEnabled(false);
-        temp.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-        temp.setText(text);
-        tagPlaces.addView(temp);
     }
 
 }
