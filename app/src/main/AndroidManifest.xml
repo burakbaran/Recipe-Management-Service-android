@@ -11,6 +11,8 @@
         android:theme="@style/AppTheme">
         <activity android:name=".DeleteActivity"></activity>
         <activity android:name=".SearchActivity" />
+        <activity android:name=".RecipeActivity"/>
+        <activity android:name=".AddActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
