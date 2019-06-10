@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     ArrayList<String> listItems=new ArrayList<String>();
     ArrayList<String> itemIds=new ArrayList<String>();
 
+    private static SwipeRefreshLayout pullToRefresh;
+
 
 
 
@@ -87,6 +89,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         listView = (ListView)findViewById(R.id.listView);//eklenen recipeler listelenmesi icin
         listView.setOnItemClickListener(this);
+
+        pullToRefresh = findViewById(R.id.pullToRefresh);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                listItems.clear();
+                new JsonTask().execute();
+                pullToRefresh.setRefreshing(false);
+            }
+        });
 
 
 

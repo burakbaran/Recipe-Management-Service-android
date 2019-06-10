@@ -32,11 +32,12 @@ public class RecipeActivity extends AppCompatActivity {
     private EditText name,details,tags;
     private ListView tagLists;
     private ArrayList<String> listItems=new ArrayList<String>(); // getten gelen tagler string
-    private Button updateOrCreateEvent, addTagToRecipe;
+    private Button updateOrCreateEvent, addTagToRecipe,deleteButton;
     private JSONArray jsonTags;
     private ArrayAdapter adapter;
     private final String baseUrl = "https://recipe-management-service.herokuapp.com/updateRecipe/";
-
+    private final String baseUrlForDelete = "https://recipe-management-service.herokuapp.com/deleteRecipe/";
+    private String id;
     private Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +66,43 @@ public class RecipeActivity extends AppCompatActivity {
             }
         });
 
+        //delete activity
+        deleteButton = findViewById(R.id.deleteButton);
+        Bundle extra = this.getIntent().getExtras();
+        ArrayList<String> list = new ArrayList<>();
+        int index=0;
+
+        if(extra == null){
+            index = 0;
+            list = null;
+            id = null;
+        }else {
+            index = (int) extra.getLong("id");
+            list = extra.getStringArrayList("list");
+            id = list.get(index);
+        }
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("ID"+id);
+                try{
+                    URL url = new URL(baseUrlForDelete+id);
+                    HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+                    httpCon.setDoOutput(true);
+                    httpCon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded" );
+                    httpCon.setRequestMethod("DELETE");
+                    int responseCode = httpCon.getResponseCode();
+                    System.out.println("Response code:" + responseCode);
+                    httpCon.connect();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+                Intent activity = new Intent(RecipeActivity.this, MainActivity.class);
+                activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(activity);
+            }
+        });
         updateOrCreateEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
