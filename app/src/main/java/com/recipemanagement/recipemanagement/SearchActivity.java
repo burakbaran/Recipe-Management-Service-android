@@ -1,17 +1,21 @@
 package com.recipemanagement.recipemanagement;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.StrictMode;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,16 +32,24 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.EventListener;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
 
 
     //search items
-    private Button searchButton;
-    private ListView searchList;
+    private Button searchButton,details;
+    private ListView searchList; //add the items on the list
     private EditText searchKey;
-    private Context context;
-    //private EditText details;
+    private ArrayAdapter adapter;
+    private ArrayAdapter adapter2;
+    private ArrayAdapter adapter3;
+    private ArrayAdapter adapter4;
+    ArrayList<String> listForDetails=new ArrayList<String>();
+    ArrayList<String> listItems=new ArrayList<String>();
+    ArrayList<String> itemIds=new ArrayList<String>();
+    ArrayList<String> listForTag=new ArrayList<String>();
+    JSONObject myJson;
+
 
 
     public static ArrayList<JSONObject> json;
@@ -51,19 +63,66 @@ public class SearchActivity extends AppCompatActivity {
                     StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
-        context = this;
+
         searchKey = findViewById(R.id.searchKey);
         searchButton = findViewById(R.id.search_event_button);
-
+        details = (Button) findViewById(R.id.details);
         searchList = findViewById(R.id.search_view);
-        //  details = findViewById(R.id.details);
+        searchList.setOnItemClickListener(this);
+
+        details.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSettingsAlert();
+            }
+        });
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new AuxClass().execute();
+
             }
         });
+
+
+    }
+
+    public void showSettingsAlert(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+
+        // Setting Dialog Title
+        alertDialog.setTitle("Details");
+
+        // Setting Dialog Message
+        try {
+            alertDialog.setMessage(myJson.getString("details"));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        alertDialog.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+
+            }
+        });
+
+        // Showing Alert Message
+        alertDialog.show();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        //nothing
+        Intent intent = new Intent();
+        intent.setClass(this, RecipeActivity.class);
+        intent.putExtra("position", position);
+        intent.putExtra("list",itemIds);
+        // Or / And
+        intent.putExtra("id", id);
+        startActivity(intent);
+
     }
 
     protected class AuxClass extends AsyncTask<Void, Void, ArrayList<JSONObject>> {
@@ -121,19 +180,22 @@ public class SearchActivity extends AppCompatActivity {
                     Log.e("App", "Failure", ex);
                 }
             }
+            adapter = new ArrayAdapter < String >
+                    (SearchActivity.this, android.R.layout.simple_list_item_1,listItems);
+            searchList.setAdapter(adapter);
+
             String a ="";
             for(int i = 0; i < response.size(); i++) {
-                JSONObject myJson = response.get(i);
-                // use myJson as needed, for example
+                myJson = response.get(i);
                 try {
-                    a += " " + myJson.getString("id");
+                    listItems.add(myJson.getString("name"));
+                    itemIds.add(myJson.getString("id"));
+                    listForDetails.add(myJson.getString("details"));
+                    listForTag.add(myJson.getString("tags"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
-            System.out.println(a);
-
         }
     }
 }

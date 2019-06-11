@@ -149,7 +149,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:choiceMode="multipleChoice"/>
             </android.support.constraint.ConstraintLayout>
         </ScrollView>
 

@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private ArrayAdapter adapter;
     ArrayList<String> listItems=new ArrayList<String>();
+
     ArrayList<String> itemIds=new ArrayList<String>();
 
     private static SwipeRefreshLayout pullToRefresh;
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
     }
+
     public void onItemClick(AdapterView<?> l, View v, int position, long id) {
         Log.i("HelloListView", "You clicked Item: " + id + " at position:" + position);
         // Then you start a new Activity via Intent
@@ -115,8 +117,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         intent.putExtra("id", id);
         startActivity(intent);
     }
-    protected class JsonTask extends AsyncTask<Void, Void, ArrayList<JSONObject>>
-    {
+
+    protected class JsonTask extends AsyncTask<Void, Void, ArrayList<JSONObject>> {
         @Override
         protected ArrayList<JSONObject> doInBackground(Void... params)
         {
@@ -183,7 +185,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 try {
                    listItems.add(myJson.getString("name"));
                    itemIds.add(myJson.getString("id"));
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

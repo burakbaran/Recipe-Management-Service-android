@@ -7,7 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.JsonToken;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,6 +57,20 @@ public class RecipeActivity extends AppCompatActivity {
 
         intent = getIntent();
         new JsonTask().execute();
+
+        tagLists.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SparseBooleanArray positionChecker = tagLists.getCheckedItemPositions();
+                int count = tagLists.getCount();
+                for (int i = count-1; i>=0; i--){
+                    if(positionChecker.get(i)){
+                        adapter.remove(listItems.get(i));
+                    }
+                }
+
+            }
+        });
 
         addTagToRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,7 +226,7 @@ public class RecipeActivity extends AppCompatActivity {
                 name.setText(response.getString("name"));
                 details.setText(response.getString("details"));
                 adapter = new ArrayAdapter < String >
-                        (RecipeActivity.this, android.R.layout.simple_list_item_1,listItems);
+                        (RecipeActivity.this, android.R.layout.simple_list_item_multiple_choice,listItems);
                 tagLists.setAdapter(adapter);
 
                 JSONArray myJson = response.getJSONArray("tags");
