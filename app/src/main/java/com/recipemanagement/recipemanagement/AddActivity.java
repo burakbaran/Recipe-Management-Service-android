@@ -5,6 +5,7 @@ import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,6 +58,17 @@ public class AddActivity extends AppCompatActivity {
         adapter = new ArrayAdapter< String >
                 (AddActivity.this, android.R.layout.simple_list_item_1,listItems);
         tagLists.setAdapter(adapter);
+
+        tagLists.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                adapter.remove(listItems.get(position));
+                tag.remove(position);
+                adapter.notifyDataSetChanged();
+
+            }
+        });
 
         addTagToRecipe.setOnClickListener(new View.OnClickListener() {
             @Override

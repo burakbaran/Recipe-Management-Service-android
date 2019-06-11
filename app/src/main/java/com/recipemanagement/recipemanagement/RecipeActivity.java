@@ -54,6 +54,7 @@ public class RecipeActivity extends AppCompatActivity {
         tagLists = findViewById(R.id.tagLists);
         addTagToRecipe = findViewById(R.id.addTag);
         updateOrCreateEvent = findViewById(R.id.addRecipe);
+        //tagLists.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         intent = getIntent();
         new JsonTask().execute();
@@ -61,13 +62,10 @@ public class RecipeActivity extends AppCompatActivity {
         tagLists.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SparseBooleanArray positionChecker = tagLists.getCheckedItemPositions();
-                int count = tagLists.getCount();
-                for (int i = count-1; i>=0; i--){
-                    if(positionChecker.get(i)){
-                        adapter.remove(listItems.get(i));
-                    }
-                }
+
+                adapter.remove(listItems.get(position));
+                jsonTags.remove(position);
+                adapter.notifyDataSetChanged();
 
             }
         });
@@ -226,7 +224,7 @@ public class RecipeActivity extends AppCompatActivity {
                 name.setText(response.getString("name"));
                 details.setText(response.getString("details"));
                 adapter = new ArrayAdapter < String >
-                        (RecipeActivity.this, android.R.layout.simple_list_item_multiple_choice,listItems);
+                        (RecipeActivity.this, android.R.layout.simple_list_item_1,listItems);
                 tagLists.setAdapter(adapter);
 
                 JSONArray myJson = response.getJSONArray("tags");
