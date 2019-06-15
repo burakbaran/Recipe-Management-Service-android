@@ -1,8 +1,13 @@
 package com.recipemanagement.recipemanagement;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,7 +21,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,16 +43,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private final String baseUrl = "https://recipe-management-service.herokuapp.com/getRecipes";
     private ListView listView;
 
-
+    FloatingActionButton addButton;
     private ArrayAdapter adapter;
     ArrayList<String> listItems=new ArrayList<String>();
+    private RelativeLayout relativeLayout;
 
     ArrayList<String> itemIds=new ArrayList<String>();
-
+    ArrayList<String> details =new ArrayList<String>();
+    ArrayList<String> taglist = new ArrayList<String>();
+    Toolbar toolbar;
     private static SwipeRefreshLayout pullToRefresh;
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -85,11 +92,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Yemek Tarifleri");
+        getSupportActionBar().setBackgroundDrawable(
+                new ColorDrawable(Color.parseColor("#064A7F")));
         setContentView(R.layout.activity_main);
         new JsonTask().execute();
 
         listView = (ListView)findViewById(R.id.listView);//eklenen recipeler listelenmesi icin
         listView.setOnItemClickListener(this);
+
+        addButton = findViewById(R.id.addButton);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this,AddActivity.class);
+                startActivity(intent);
+            }
+        });
 
         pullToRefresh = findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -98,10 +117,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 listItems.clear();
                 new JsonTask().execute();
                 pullToRefresh.setRefreshing(false);
-            }
+    }
         });
-
-
 
 
     }
@@ -110,9 +127,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Log.i("HelloListView", "You clicked Item: " + id + " at position:" + position);
         // Then you start a new Activity via Intent
         Intent intent = new Intent();
-        intent.setClass(this, RecipeActivity.class);
+        intent.setClass(this, ViewRecipe.class);
         intent.putExtra("position", position);
         intent.putExtra("list",itemIds);
+        intent.putExtra("tags",taglist); //tamam
+        intent.putExtra("name",listItems); //tamam
+        intent.putExtra("details",details); //tamam
         // Or / And
         intent.putExtra("id", id);
         startActivity(intent);
@@ -185,11 +205,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 try {
                    listItems.add(myJson.getString("name"));
                    itemIds.add(myJson.getString("id"));
+                   taglist.add(myJson.getString("tags"));
+                   details.add(myJson.getString("details"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-
         }
     }
 }

@@ -68,7 +68,6 @@ public class RecipeActivity extends AppCompatActivity {
                         adapter.remove(listItems.get(i));
                     }
                 }
-
             }
         });
 
@@ -82,43 +81,6 @@ public class RecipeActivity extends AppCompatActivity {
             }
         });
 
-        //delete activity
-        deleteButton = findViewById(R.id.deleteButton);
-        Bundle extra = this.getIntent().getExtras();
-        ArrayList<String> list = new ArrayList<>();
-        int index=0;
-
-        if(extra == null){
-            index = 0;
-            list = null;
-            id = null;
-        }else {
-            index = (int) extra.getLong("id");
-            list = extra.getStringArrayList("list");
-            id = list.get(index);
-        }
-
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("ID"+id);
-                try{
-                    URL url = new URL(baseUrlForDelete+id);
-                    HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
-                    httpCon.setDoOutput(true);
-                    httpCon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded" );
-                    httpCon.setRequestMethod("DELETE");
-                    int responseCode = httpCon.getResponseCode();
-                    System.out.println("Response code:" + responseCode);
-                    httpCon.connect();
-                }catch(Exception e){
-                    e.printStackTrace();
-                }
-                Intent activity = new Intent(RecipeActivity.this, MainActivity.class);
-                activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(activity);
-            }
-        });
         updateOrCreateEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
