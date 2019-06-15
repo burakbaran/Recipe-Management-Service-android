@@ -116,9 +116,9 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         //nothing
         Intent intent = new Intent();
-        intent.setClass(this, RecipeActivity.class);
-        intent.putExtra("position", position);
-        intent.putExtra("list",itemIds);
+        intent.setClass(this, ViewRecipe.class);
+        String idofItem = itemIds.get(position);
+        intent.putExtra("idofItem",idofItem);
         // Or / And
         intent.putExtra("id", id);
         startActivity(intent);

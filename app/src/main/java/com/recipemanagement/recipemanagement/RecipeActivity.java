@@ -5,21 +5,17 @@ import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.JsonToken;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,7 +30,7 @@ public class RecipeActivity extends AppCompatActivity {
     private EditText name,details,tags;
     private ListView tagLists;
     private ArrayList<String> listItems=new ArrayList<String>(); // getten gelen tagler string
-    private Button updateOrCreateEvent, addTagToRecipe,deleteButton;
+    private Button updateOrCreateEvent, addTagToRecipe;
     private JSONArray jsonTags;
     private ArrayAdapter adapter;
     private final String baseUrl = "https://recipe-management-service.herokuapp.com/updateRecipe/";
@@ -48,12 +44,13 @@ public class RecipeActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
         setContentView(R.layout.activity_recipe);
 
-        name = findViewById(R.id.recipeName);
+        name = findViewById(R.id.recipeDetails);
         details = findViewById(R.id.recipeDescription);
         tags = findViewById(R.id.recipeTags);
         tagLists = findViewById(R.id.tagLists);
         addTagToRecipe = findViewById(R.id.addTag);
         updateOrCreateEvent = findViewById(R.id.addRecipe);
+        //tagLists.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         intent = getIntent();
         new JsonTask().execute();
@@ -61,13 +58,11 @@ public class RecipeActivity extends AppCompatActivity {
         tagLists.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SparseBooleanArray positionChecker = tagLists.getCheckedItemPositions();
-                int count = tagLists.getCount();
-                for (int i = count-1; i>=0; i--){
-                    if(positionChecker.get(i)){
-                        adapter.remove(listItems.get(i));
-                    }
-                }
+
+                adapter.remove(listItems.get(position));
+                jsonTags.remove(position);
+                adapter.notifyDataSetChanged();
+
             }
         });
 
@@ -81,15 +76,22 @@ public class RecipeActivity extends AppCompatActivity {
             }
         });
 
+        //delete activity
+        Bundle extra = this.getIntent().getExtras();
+
+
+        if(extra == null){
+            id = null;
+        }else {
+            id = (String) intent.getExtras().get("idofItem");
+        }
+
         updateOrCreateEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<String> value = (ArrayList<String>)intent.getExtras().get("list");
-                int pos = intent.getExtras().getInt("position");
-
-                String id = value.get(pos);
+                String value =(String) intent.getExtras().get("idofItem");
                 try {
-                    URL url = new URL(baseUrl + id);
+                    URL url = new URL(baseUrl + value);
                     System.out.println(url.toString());
                     HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
                     httpCon.setDoOutput(true);
@@ -130,10 +132,12 @@ public class RecipeActivity extends AppCompatActivity {
         protected JSONObject doInBackground(Void... params)
         {
 
-            ArrayList<String> value = (ArrayList<String>)intent.getExtras().get("list");
+            String value =(String) intent.getExtras().get("idofItem");
+            System.out.println(value);
+
             int pos = intent.getExtras().getInt("position");
-            String id = value.get(pos);
-            String str="https://recipe-management-service.herokuapp.com/getRecipe/" + id;
+
+            String str="https://recipe-management-service.herokuapp.com/getRecipe/" + value;
             BufferedReader bufferedReader = null;
             try {
                 System.out.println("objects fecthing");
@@ -188,7 +192,7 @@ public class RecipeActivity extends AppCompatActivity {
                 name.setText(response.getString("name"));
                 details.setText(response.getString("details"));
                 adapter = new ArrayAdapter < String >
-                        (RecipeActivity.this, android.R.layout.simple_list_item_multiple_choice,listItems);
+                        (RecipeActivity.this, android.R.layout.simple_list_item_1,listItems);
                 tagLists.setAdapter(adapter);
 
                 JSONArray myJson = response.getJSONArray("tags");

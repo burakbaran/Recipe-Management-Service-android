@@ -4,19 +4,17 @@ import android.content.Intent;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -26,6 +24,7 @@ import java.util.ArrayList;
 
 public class AddActivity extends AppCompatActivity {
 
+    private Toolbar toolbar;
     private JSONArray tag = new JSONArray();
     private Button updateOrCreateEvent, addTagToRecipe;
     private ListView tagLists;
@@ -40,12 +39,17 @@ public class AddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
+        toolbar = (Toolbar) findViewById(R.id.CustomToolBa);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("    Yemek Tarifleri");
+        getSupportActionBar().setIcon(R.drawable.asdf);
+
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
 
         updateOrCreateEvent = findViewById(R.id.addRecipe);
-        name = findViewById(R.id.recipeName);
+        name = findViewById(R.id.recipeDetails);
         description = findViewById(R.id.recipeDescription);
         tags = findViewById(R.id.recipeTags);
         tagLists = findViewById(R.id.tagLists);
@@ -57,6 +61,17 @@ public class AddActivity extends AppCompatActivity {
         adapter = new ArrayAdapter< String >
                 (AddActivity.this, android.R.layout.simple_list_item_1,listItems);
         tagLists.setAdapter(adapter);
+
+        tagLists.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                adapter.remove(listItems.get(position));
+                tag.remove(position);
+                adapter.notifyDataSetChanged();
+
+            }
+        });
 
         addTagToRecipe.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -2,15 +2,25 @@ package com.recipemanagement.recipemanagement;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -24,6 +34,7 @@ public class ViewRecipe extends AppCompatActivity {
     private Button deleteButton;
     private Button updateButton;
     private ListView tagLists;
+    private Bundle extra;
     private String id;
     //private Intent intent;
     ArrayAdapter adapter;
@@ -48,31 +59,23 @@ public class ViewRecipe extends AppCompatActivity {
         deleteButton = findViewById(R.id.deleteButton);
         updateButton = findViewById(R.id.updateButton);
         tagLists = findViewById(R.id.tagLists);
-        Bundle extra = this.getIntent().getExtras();
+        extra = this.getIntent().getExtras();
 
-        int index=0;
+
 
         if(extra == null){
-            index = 0;
-            list = null;
             id = null;
         }else {
-            index = (int) extra.getLong("id");
-            list = extra.getStringArrayList("list");
-            id = list.get(index);
-            name = extra.getStringArrayList("name");
-            details = extra.getStringArrayList("details"); // bunlar settext olmalı
-            tags = extra.getStringArrayList("tags"); //tagler yazılması incele
-            position = extra.getInt("position");
+            id = (String)extra.get("idofItem");
         }
 
-        recipeName.setText(name.get(index));
-        recipeDetails.setText(details.get(index)); //textler güncellendi.
 
         adapter = new ArrayAdapter < String >
                 (ViewRecipe.this, android.R.layout.simple_list_item_1,tags);
         tagLists.setAdapter(adapter);
 
+        new JsonTask().execute();
+        adapter.notifyDataSetChanged();
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { //delete recipe
@@ -100,8 +103,7 @@ public class ViewRecipe extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(ViewRecipe.this,RecipeActivity.class);
-                intent.putExtra("position", position);
-                intent.putExtra("list",list);
+                intent.putExtra("idofItem", id);
 
                 startActivity(intent);
             }
@@ -114,6 +116,85 @@ public class ViewRecipe extends AppCompatActivity {
         editText.setCursorVisible(false);
         editText.setKeyListener(null);
         editText.setBackgroundColor(Color.TRANSPARENT);
+    }
+
+    protected class JsonTask extends AsyncTask<Void, Void, JSONObject>
+    {
+        @Override
+        protected JSONObject doInBackground(Void... params)
+        {
+
+            String value =(String) extra.get("idofItem");
+            System.out.println(value);
+
+
+            String str="https://recipe-management-service.herokuapp.com/getRecipe/" + value;
+            BufferedReader bufferedReader = null;
+            try {
+                System.out.println("objects fecthing");
+                URL getEventsUrl = new URL(str);
+
+                HttpURLConnection httpURLConnection = (HttpURLConnection) getEventsUrl.openConnection();
+                InputStream inputStream = httpURLConnection.getInputStream();
+                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                StringBuilder builder = new StringBuilder();
+
+                String line = "";
+                while (line != null) {
+                    line = bufferedReader.readLine();
+                    builder.append(line);
+                }
+
+                JSONObject result = new JSONObject(builder.toString());
+
+                return result;
+            }
+            catch(Exception ex)
+            {
+                Log.e("App", "yourDataTask", ex);
+                return null;
+            }
+            finally
+            {
+                if(bufferedReader != null)
+                {
+                    try {
+                        bufferedReader.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject response)
+        {
+            if(response != null)
+            {
+                try {
+                    Log.e("App", "Success: "  );
+                } catch (Exception ex) {
+                    Log.e("App", "Failure", ex);
+                }
+            }
+            try {
+
+                recipeName.setText(response.getString("name"));
+                recipeDetails.setText(response.getString("details"));
+
+                JSONArray myJson = response.getJSONArray("tags");
+
+                for(int i = 0; i < myJson.length(); i++) {
+                    tags.add(myJson.get(i).toString());
+                }
+                setTitle(recipeName.getText().toString());
+                adapter.notifyDataSetChanged();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
 }
