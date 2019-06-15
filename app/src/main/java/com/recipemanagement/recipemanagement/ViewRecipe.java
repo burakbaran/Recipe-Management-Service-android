@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -36,6 +37,7 @@ public class ViewRecipe extends AppCompatActivity {
     private ListView tagLists;
     private Bundle extra;
     private String id;
+    private Toolbar toolbar;
     //private Intent intent;
     ArrayAdapter adapter;
     //delete calısıyor
@@ -51,6 +53,12 @@ public class ViewRecipe extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_recipe);
+
+        toolbar = (Toolbar) findViewById(R.id.CustomT);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("    Yemek Tarifleri");
+        getSupportActionBar().setIcon(R.drawable.asdf);
+
         recipeName = (EditText) findViewById(R.id.recipeName);
         recipeDetails = (EditText) findViewById(R.id.recipeDescription);
         disableEditText(recipeDetails);

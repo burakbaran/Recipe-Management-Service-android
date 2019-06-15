@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,12 +38,18 @@ public class RecipeActivity extends AppCompatActivity {
     private final String baseUrlForDelete = "https://recipe-management-service.herokuapp.com/deleteRecipe/";
     private String id;
     private Intent intent;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         setContentView(R.layout.activity_recipe);
+
+        toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.CustomTool);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("    Yemek Tarifleri");
+        getSupportActionBar().setIcon(R.drawable.asdf);
 
         name = findViewById(R.id.recipeDetails);
         details = findViewById(R.id.recipeDescription);

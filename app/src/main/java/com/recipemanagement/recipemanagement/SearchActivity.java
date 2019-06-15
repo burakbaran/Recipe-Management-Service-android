@@ -8,6 +8,7 @@ import android.os.StrictMode;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -40,6 +41,7 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
     private Button searchButton,details;
     private ListView searchList; //add the items on the list
     private EditText searchKey;
+    private Toolbar toolbar;
     private ArrayAdapter adapter;
     private ArrayAdapter adapter2;
     private ArrayAdapter adapter3;
@@ -57,6 +59,13 @@ public class SearchActivity extends AppCompatActivity implements AdapterView.OnI
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
+        //CustomBar
+        toolbar = findViewById(R.id.CustomBar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("    Yemek Tarifleri");
+        getSupportActionBar().setIcon(R.drawable.asdf);
+
+
         if (android.os.Build.VERSION.SDK_INT > 9)
         {
             StrictMode.ThreadPolicy policy = new

@@ -1,135 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true"
-    tools:context=".ViewRecipe">
+    android:layout_height="match_parent">
 
-    <android.support.constraint.ConstraintLayout
+    <include layout="@layout/toolbar"
+        android:id="@+id/CustomT"/>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <EditText
-            android:id="@+id/recipeName"
-            android:layout_width="0dp"
-            android:layout_height="49dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="66dp"
-            android:layout_marginEnd="8dp"
-            android:ems="10"
-            android:inputType="textMultiLine"
-            app:autoSizeTextType="uniform"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.509"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:textColor="#000"/>
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_below= "@id/CustomT"
+        tools:context=".ViewRecipe">
 
 
-        <EditText
-            android:id="@+id/recipeDescription"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="52dp"
-            android:layout_marginEnd="8dp"
-            android:ems="10"
-            android:background="@null"
-            android:gravity="start|top"
-            android:inputType="textMultiLine"
-            app:autoSizeTextType="uniform"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.509"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recipeName"
-            android:textColor="#000"/>
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="Tarif İsmi"
-            app:layout_constraintBottom_toTopOf="@+id/recipeName"
-            app:layout_constraintEnd_toEndOf="@+id/recipeName"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/recipeName"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.827"
-            android:textColor="#f00"/>
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="Tarif Açıklaması"
-            app:layout_constraintBottom_toTopOf="@+id/recipeDescription"
-            app:layout_constraintEnd_toEndOf="@+id/recipeDescription"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/recipeDescription"
-            app:layout_constraintTop_toBottomOf="@+id/recipeName"
-            app:layout_constraintVertical_bias="0.0"
-            android:textColor="#f00"/>
+            <EditText
+                android:id="@+id/recipeName"
+                android:layout_width="0dp"
+                android:layout_height="49dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="66dp"
+                android:layout_marginEnd="8dp"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                app:autoSizeTextType="uniform"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.509"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textColor="#000"/>
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="8dp"
-            android:text="Tarif Etiketleri"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.026"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recipeDescription" />
 
-        <ListView
-            android:id="@+id/tagLists"
-            android:layout_width="363dp"
-            android:layout_height="191dp"
+            <EditText
+                android:id="@+id/recipeDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="52dp"
+                android:layout_marginEnd="8dp"
+                android:ems="10"
+                android:background="@null"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                app:autoSizeTextType="uniform"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.509"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recipeName"
+                android:textColor="#000"/>
 
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="36dp"
-            android:layout_marginEnd="8dp"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="Tarif İsmi"
+                app:layout_constraintBottom_toTopOf="@+id/recipeName"
+                app:layout_constraintEnd_toEndOf="@+id/recipeName"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/recipeName"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.827"
+                android:textColor="#f00"/>
 
-        <Button
-            android:id="@+id/deleteButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="108dp"
-            android:text="Tarifi Sil"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/updateButton"
-            app:layout_constraintHorizontal_bias="0.451"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tagLists" />
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="Tarif Açıklaması"
+                app:layout_constraintBottom_toTopOf="@+id/recipeDescription"
+                app:layout_constraintEnd_toEndOf="@+id/recipeDescription"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/recipeDescription"
+                app:layout_constraintTop_toBottomOf="@+id/recipeName"
+                app:layout_constraintVertical_bias="0.0"
+                android:textColor="#f00"/>
 
-        <Button
-            android:id="@+id/updateButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="56dp"
-            android:layout_marginBottom="108dp"
-            android:text="Tarifi Güncelle"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tagLists" />
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="8dp"
+                android:text="Tarif Etiketleri"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.026"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recipeDescription" />
 
-    </android.support.constraint.ConstraintLayout>
-</ScrollView>
+            <ListView
+                android:id="@+id/tagLists"
+                android:layout_width="363dp"
+                android:layout_height="191dp"
+
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="36dp"
+                android:layout_marginEnd="8dp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+            <Button
+                android:id="@+id/deleteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="108dp"
+                android:text="Tarifi Sil"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/updateButton"
+                app:layout_constraintHorizontal_bias="0.451"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tagLists" />
+
+            <Button
+                android:id="@+id/updateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="56dp"
+                android:layout_marginBottom="108dp"
+                android:text="Tarifi Güncelle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tagLists" />
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+</RelativeLayout>

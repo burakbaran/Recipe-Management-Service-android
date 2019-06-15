@@ -32,6 +32,7 @@ public class AddActivity extends AppCompatActivity {
     private ArrayList<String> listItems=new ArrayList<String>(); // getten gelen tagler string
 
 
+
     private EditText name, description, tags;
     private final String baseUrl = "https://recipe-management-service.herokuapp.com/addRecipe";
     @Override
