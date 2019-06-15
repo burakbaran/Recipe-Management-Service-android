@@ -5,21 +5,17 @@ import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.JsonToken;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -48,7 +44,7 @@ public class RecipeActivity extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
         setContentView(R.layout.activity_recipe);
 
-        name = findViewById(R.id.recipeName);
+        name = findViewById(R.id.recipeDetails);
         details = findViewById(R.id.recipeDescription);
         tags = findViewById(R.id.recipeTags);
         tagLists = findViewById(R.id.tagLists);
@@ -83,17 +79,12 @@ public class RecipeActivity extends AppCompatActivity {
         //delete activity
         deleteButton = findViewById(R.id.deleteButton);
         Bundle extra = this.getIntent().getExtras();
-        ArrayList<String> list = new ArrayList<>();
-        int index=0;
+
 
         if(extra == null){
-            index = 0;
-            list = null;
             id = null;
         }else {
-            index = (int) extra.getLong("id");
-            list = extra.getStringArrayList("list");
-            id = list.get(index);
+            id = (String) intent.getExtras().get("idofItem");
         }
 
         deleteButton.setOnClickListener(new View.OnClickListener() {
@@ -120,12 +111,9 @@ public class RecipeActivity extends AppCompatActivity {
         updateOrCreateEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<String> value = (ArrayList<String>)intent.getExtras().get("list");
-                int pos = intent.getExtras().getInt("position");
-
-                String id = value.get(pos);
+                String value =(String) intent.getExtras().get("idofItem");
                 try {
-                    URL url = new URL(baseUrl + id);
+                    URL url = new URL(baseUrl + value);
                     System.out.println(url.toString());
                     HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
                     httpCon.setDoOutput(true);
@@ -166,10 +154,12 @@ public class RecipeActivity extends AppCompatActivity {
         protected JSONObject doInBackground(Void... params)
         {
 
-            ArrayList<String> value = (ArrayList<String>)intent.getExtras().get("list");
+            String value =(String) intent.getExtras().get("idofItem");
+            System.out.println(value);
+
             int pos = intent.getExtras().getInt("position");
-            String id = value.get(pos);
-            String str="https://recipe-management-service.herokuapp.com/getRecipe/" + id;
+
+            String str="https://recipe-management-service.herokuapp.com/getRecipe/" + value;
             BufferedReader bufferedReader = null;
             try {
                 System.out.println("objects fecthing");
