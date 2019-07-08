@@ -100,10 +100,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         getSupportActionBar().setIcon(R.drawable.asdf);
 
 
-        new JsonTask().execute();
+
 
         listView = (ListView)findViewById(R.id.listView);//eklenen recipeler listelenmesi icin
-        listView.setOnItemClickListener(this);
+        if(listView != null){
+            listView.setOnItemClickListener(this);
+
+        }
 
         addButton = findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -126,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
-
+        new JsonTask().execute();
 
 
     }
@@ -196,6 +199,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         @Override
         protected void onPostExecute(ArrayList<JSONObject> response)
         {
+            setContentView(R.layout.activity_main);
             if(response != null)
             {
                 try {
@@ -225,6 +229,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
             }
 
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
 
         }
     }
