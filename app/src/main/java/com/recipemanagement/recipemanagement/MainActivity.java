@@ -199,7 +199,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         @Override
         protected void onPostExecute(ArrayList<JSONObject> response)
         {
-            setContentView(R.layout.activity_main);
             if(response != null)
             {
                 try {
@@ -221,7 +220,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     recipeModel.setName(myJson.getString("name"));
                     recipeModel.setId(myJson.getString("id"));
                     recipeModel.setDetails(myJson.getString("details"));
-                    recipeModel.setId(myJson.getString("id"));
                     recipeModelList.add(recipeModel);
 
                 } catch (JSONException e) {
