@@ -3,17 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".RecipeActivity">
+    android:layout_height="match_parent">
+
     <include layout="@layout/toolbar"
         android:id="@+id/CustomToolBa"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:layout_below="@id/CustomToolBa"
+        tools:context=".AddActivity">
+
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
+
             <EditText
                 android:id="@+id/recipeDetails"
                 android:layout_width="0dp"
@@ -28,6 +33,7 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
             <EditText
                 android:id="@+id/recipeDescription"
                 android:layout_width="0dp"
@@ -35,8 +41,8 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="52dp"
                 android:layout_marginEnd="8dp"
-                android:ems="10"
                 android:background="@null"
+                android:ems="10"
                 android:gravity="start|top"
                 android:inputType="textMultiLine"
                 app:autoSizeTextType="uniform"
@@ -44,6 +50,7 @@
                 app:layout_constraintHorizontal_bias="0.509"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recipeDetails" />
+
             <EditText
                 android:id="@+id/recipeTags"
                 android:layout_width="240dp"
@@ -58,18 +65,22 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recipeDescription" />
+
             <Button
                 android:id="@+id/addRecipe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="4dp"
                 android:text="Tarif Ekle"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.484"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.525"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+                app:layout_constraintVertical_bias="1.0" />
+
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
@@ -84,6 +95,7 @@
                 app:layout_constraintStart_toStartOf="@+id/recipeDetails"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0" />
+
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
@@ -97,7 +109,8 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/recipeDescription"
                 app:layout_constraintTop_toBottomOf="@+id/recipeDetails"
-                app:layout_constraintVertical_bias="0.0"/>
+                app:layout_constraintVertical_bias="0.0" />
+
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
@@ -112,6 +125,16 @@
                 app:layout_constraintStart_toStartOf="@+id/recipeTags"
                 app:layout_constraintTop_toBottomOf="@+id/recipeDescription"
                 app:layout_constraintVertical_bias="1.0" />
+
+            <Button
+                android:id="@+id/photoAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="52dp"
+                android:layout_marginTop="52dp"
+                android:text="Fotoğraf Yükle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/scrollView3" />
+
             <Button
                 android:id="@+id/addTag"
                 android:layout_width="wrap_content"
@@ -121,26 +144,30 @@
                 android:text="Etiket Ekle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recipeDescription" />
+
             <ScrollView
                 android:id="@+id/scrollView3"
                 android:layout_width="0dp"
                 android:layout_height="152dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="48dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/addRecipe"
+
+                android:background="@drawable/custom_background"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recipeTags">
+
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:minHeight="152dp">
+
                     <ListView
                         android:id="@+id/tagLists"
                         android:layout_width="363dp"
-                        android:layout_height="191dp"
+                        android:layout_height="186dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
@@ -148,10 +175,32 @@
                         android:visibility="visible"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.461"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="1.0" />
                 </android.support.constraint.ConstraintLayout>
             </ScrollView>
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="206dp"
+                android:layout_height="88dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/custom_background"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toStartOf="@+id/photoAdd"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/scrollView3">
+
+                <ImageView
+                    android:id="@+id/image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 </RelativeLayout>

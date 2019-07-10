@@ -1,7 +1,9 @@
 package com.recipemanagement.recipemanagement;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -10,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -25,10 +28,13 @@ import java.util.ArrayList;
 public class AddActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
+    private static final int PICK_IMAGE = 10;
     private JSONArray tag = new JSONArray();
-    private Button updateOrCreateEvent, addTagToRecipe;
+    private Button updateOrCreateEvent, addTagToRecipe, photoAdd;
     private ListView tagLists;
     private ArrayAdapter adapter;
+    private ImageView image;
+    Uri imageUri;
     private ArrayList<String> listItems=new ArrayList<String>(); // getten gelen tagler string
 
 
@@ -54,8 +60,18 @@ public class AddActivity extends AppCompatActivity {
         description = findViewById(R.id.recipeDescription);
         tags = findViewById(R.id.recipeTags);
         tagLists = findViewById(R.id.tagLists);
+        image = findViewById(R.id.image);
 
         addTagToRecipe = findViewById(R.id.addTag);
+        photoAdd= findViewById(R.id.photoAdd);
+
+        photoAdd.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGallery();
+            }
+        }));
+
 
 
 
@@ -120,6 +136,21 @@ public class AddActivity extends AppCompatActivity {
                 AddActivity.this.startActivity(activity);
             }
         });
+    }
+    private void openGallery(){
+        Intent gallery = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        //gallery.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        startActivityForResult(gallery,PICK_IMAGE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode,resultCode,data);
+        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK ){
+            imageUri = data.getData();
+            image.setImageURI(imageUri);
+        }
     }
 
 }
