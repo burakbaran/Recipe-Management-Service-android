@@ -114,7 +114,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/layout_1"
                 android:layout_marginTop="50dp"
-                android:background="@drawable/btn_bg"
+                android:background="@drawable/button_state"
                 android:text="Giriş Yap"
                 android:layout_centerHorizontal="true"
                 android:paddingRight="70dp"

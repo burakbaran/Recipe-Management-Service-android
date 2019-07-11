@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import com.recipemanagement.recipemanagement.utils.SaveSharedPreference;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,7 +52,16 @@ public class ActivityLogin extends AppCompatActivity {
         password = findViewById(R.id.password);
         btn = findViewById(R.id.btn);
 
-        handler.postDelayed(runnable,2000);
+
+
+        if(SaveSharedPreference.getLoggedStatus(getApplicationContext())) {
+            Intent activity = new Intent(ActivityLogin.this, MainActivity.class);
+            ActivityLogin.this.startActivity(activity);
+        }else{
+            handler.postDelayed(runnable,2000);
+        }
+
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,6 +91,8 @@ public class ActivityLogin extends AppCompatActivity {
                     System.out.println("aut code: " + s);
 
                     if(responseCode == 200){
+                        SaveSharedPreference.setLoggedIn(getApplicationContext(), true);
+                        SaveSharedPreference.setToken(getApplicationContext(), s);
                         Intent activity = new Intent(ActivityLogin.this, MainActivity.class);
                         activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         ActivityLogin.this.startActivity(activity);
