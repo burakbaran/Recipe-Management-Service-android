@@ -1,6 +1,8 @@
 package com.recipemanagement.recipemanagement;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,9 +15,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 
+import com.recipemanagement.recipemanagement.models.Photo;
 import com.recipemanagement.recipemanagement.models.RecipeModel;
 
 import org.json.JSONArray;
@@ -27,14 +31,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private final String baseUrl = "https://recipe-management-service.herokuapp.com/getRecipes";
     private ListView listView;
     private Toolbar toolbar;
+    private ImageView imageView;
 
     FloatingActionButton addButton;
 
@@ -45,6 +52,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     ArrayList<String> details =new ArrayList<String>();
     ArrayList<String> taglist = new ArrayList<String>();
     private static SwipeRefreshLayout pullToRefresh;
+
+    private static HashMap<String,Bitmap> cacheForUrls = new HashMap<String,Bitmap>(); //cache for fewer request
+   // TODO: silinen resim cacheden silinmeli
 
 
 
@@ -83,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("    Yemek Tarifleri");
         getSupportActionBar().setIcon(R.drawable.asdf);
+
+        imageView = findViewById(R.id.imageView);
 
 
 
@@ -144,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 URL getEventsUrl = new URL(str);
 
                 HttpURLConnection httpURLConnection = (HttpURLConnection) getEventsUrl.openConnection();
+                httpURLConnection.setUseCaches(true);
                 InputStream inputStream = httpURLConnection.getInputStream();
                 bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
                 StringBuilder builder = new StringBuilder();
@@ -205,12 +218,52 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     recipeModel.setName(myJson.getString("name"));
                     recipeModel.setId(myJson.getString("id"));
                     recipeModel.setDetails(myJson.getString("details"));
+
+                    JSONArray jsonPhotos = myJson.getJSONArray("photos");
+                    ArrayList<Photo> photos = new ArrayList<>();
+                    for(int k = 0; k < jsonPhotos.length(); k++){
+                        Photo p = new Photo();
+                        JSONObject jsonPhoto = (JSONObject) jsonPhotos.get(k);
+                        p.setId(jsonPhoto.getString("id"));
+                        p.setPhotoLink(jsonPhoto.getString("photoLink"));
+                        p.setCloudinaryId(jsonPhoto.getString("publicCloudinaryId"));
+                        photos.add(p);
+                        if(k == 0 && p.getPhotoLink() != null ){
+                            URL url = null;
+                            try {
+                                url = new URL(p.getPhotoLink());
+
+                            } catch (MalformedURLException e) {
+                                e.printStackTrace();
+                            }
+                            Bitmap bmp = null;
+                            try {
+                                if(cacheForUrls.get(p.getPhotoLink()) == null){
+                                    bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                    System.out.println("girdii");
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            if(cacheForUrls.get(p.getPhotoLink()) == null) {
+                                cacheForUrls.put(p.getPhotoLink(), bmp);
+                            }
+                            recipeModel.setImage(cacheForUrls.get(p.getPhotoLink()));
+                        }
+                    }
+
+                    recipeModel.setPhotos(photos);
                     recipeModelList.add(recipeModel);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
+           /* for (int i = 0; i < recipeModelList.size(); i++){ //for debug purpose, this for prints all links
+                for (int j = 0; j < recipeModelList.get(i).getPhotos().size(); j++){
+                    System.out.println(recipeModelList.get(i).getPhotos().get(j).getPhotoLink());
+                }
+            }*/
 
 
         }

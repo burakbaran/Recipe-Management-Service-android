@@ -1,11 +1,6 @@
 package com.recipemanagement.recipemanagement;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.support.design.widget.BottomSheetDialog;
@@ -18,7 +13,6 @@ import android.widget.RelativeLayout;
 
 import com.recipemanagement.recipemanagement.utils.SaveSharedPreference;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,49 +21,28 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class ActivityLogin extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
 
     RelativeLayout relay1;
-    EditText username, password;
-    private String baseUrl = "https://recipe-management-service.herokuapp.com/login";
-    Button btn,btn_signUp;
-    Handler handler = new Handler();
-    Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            relay1.setVisibility(View.VISIBLE);
-        }
-    };
+    EditText username, password, fullname;
+    private String baseUrl = "https://recipe-management-service.herokuapp.com/signup";
+    Button btn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_sign_up);
         relay1 = findViewById(R.id.relay_layout1);
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
+        fullname = findViewById(R.id.fullname);
         btn = findViewById(R.id.btn);
-        btn_signUp = findViewById(R.id.btn_signup);
 
 
 
-        if(SaveSharedPreference.getLoggedStatus(getApplicationContext())) {
-            Intent activity = new Intent(ActivityLogin.this, MainActivity.class);
-            ActivityLogin.this.startActivity(activity);
-        }else{
-            handler.postDelayed(runnable,2000);
-        }
 
-        btn_signUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent activity = new Intent(ActivityLogin.this, SignUpActivity.class);
-                activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                ActivityLogin.this.startActivity(activity);
-            }
-        });
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,6 +56,7 @@ public class ActivityLogin extends AppCompatActivity {
                     JSONObject eventObject = new JSONObject();
                     eventObject.put("username",username.getText().toString());
                     eventObject.put("password", password.getText().toString());
+                    eventObject.put("fullname", fullname.getText().toString());
 
                     String json = eventObject.toString();
 
@@ -99,17 +73,14 @@ public class ActivityLogin extends AppCompatActivity {
                     System.out.println("aut code: " + s);
 
                     if(responseCode == 200){
-                        SaveSharedPreference.setLoggedIn(getApplicationContext(), true);
-                        SaveSharedPreference.setToken(getApplicationContext(), s);
-                        Intent activity = new Intent(ActivityLogin.this, MainActivity.class);
+                        Intent activity = new Intent(SignUpActivity.this, ActivityLogin.class);
                         activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        ActivityLogin.this.startActivity(activity);
+                        SignUpActivity.this.startActivity(activity);
                     }
                     else{
-                        BottomSheetDialog dialog = new BottomSheetDialog(ActivityLogin.this);
-                        dialog.setContentView(R.layout.wrong_username_password);
+                        BottomSheetDialog dialog = new BottomSheetDialog(SignUpActivity.this);
+                        dialog.setContentView(R.layout.same_user_name);
                         dialog.show();
-
 
                     }
 

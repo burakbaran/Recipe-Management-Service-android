@@ -22,8 +22,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:padding="4dp"
-                android:src="@drawable/dummy" />
+                android:padding="4dp" />
 
         </FrameLayout>
 
