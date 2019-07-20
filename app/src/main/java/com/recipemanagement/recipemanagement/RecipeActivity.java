@@ -31,14 +31,17 @@ public class RecipeActivity extends AppCompatActivity {
     private EditText name,details,tags;
     private ListView tagLists;
     private ArrayList<String> listItems=new ArrayList<String>(); // getten gelen tagler string
-    private Button updateOrCreateEvent, addTagToRecipe;
+    private Button updateOrCreateEvent, addTagToRecipe , likeButton;
     private JSONArray jsonTags;
     private ArrayAdapter adapter;
     private final String baseUrl = "https://recipe-management-service.herokuapp.com/updateRecipe/";
+    private final String baseUrlLiked = "https://recipe-management-service.herokuapp.com/liked/";
     private final String baseUrlForDelete = "https://recipe-management-service.herokuapp.com/deleteRecipe/";
     private String id;
     private Intent intent;
     private Toolbar toolbar;
+    static String token = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +60,7 @@ public class RecipeActivity extends AppCompatActivity {
         tagLists = findViewById(R.id.tagLists);
         addTagToRecipe = findViewById(R.id.addTag);
         updateOrCreateEvent = findViewById(R.id.addRecipe);
+
         //tagLists.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         intent = getIntent();
@@ -73,6 +77,7 @@ public class RecipeActivity extends AppCompatActivity {
             }
         });
 
+
         addTagToRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,11 +88,14 @@ public class RecipeActivity extends AppCompatActivity {
             }
         });
 
+
+
+
         //delete activity
-        Bundle extra = this.getIntent().getExtras();
+        Bundle lol = this.getIntent().getExtras();
 
 
-        if(extra == null){
+        if(lol == null){
             id = null;
         }else {
             id = (String) intent.getExtras().get("idofItem");

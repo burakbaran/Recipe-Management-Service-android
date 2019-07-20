@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "669689343518",
+    "firebase_url": "https://recipe-management-c516b.firebaseio.com",
+    "project_id": "recipe-management-c516b",
+    "storage_bucket": "recipe-management-c516b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:669689343518:android:4eb3ee9aaa75c92c",
+        "android_client_info": {
+          "package_name": "com.recipemanagement.recipemanagement"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "669689343518-dv4ccifpl153aos04jjqjkqipkmbj0nd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7GG3nWuUWl8g158zdQzFwPSHFRrX9rbk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "669689343518-dv4ccifpl153aos04jjqjkqipkmbj0nd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

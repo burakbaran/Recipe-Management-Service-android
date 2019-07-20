@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private RecipeArrayAdapter adapter;
     ArrayList<String> listItems=new ArrayList<String>();
-
+     String str="";
     ArrayList<String> itemIds=new ArrayList<String>();
     ArrayList<String> details =new ArrayList<String>();
     ArrayList<String> taglist = new ArrayList<String>();
@@ -54,22 +54,38 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         MenuInflater menuInflater = getMenuInflater();
         //adding sections in menu bar
         menuInflater.inflate(R.menu.search_recipe,menu);
+        menuInflater.inflate(R.menu.auto_delete,menu);
+        menuInflater.inflate(R.menu.about_us,menu);
         return super.onCreateOptionsMenu(menu);
+
     }
 
-
+    public void getIntentItems(){
+        Intent intent = getIntent();
+        str = (String) intent.getExtras().get("token");
+        System.out.println("Token86378162   "+ str);
+    }
 
     //move on the selected activity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-
         if(item.getItemId() == R.id.search_recipe){
             Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
             startActivity(intent);
         }
 
+        if(item.getItemId() == R.id.auto_delete){
+            getIntentItems();
+            Intent activity = new Intent(MainActivity.this, AutoDelete.class);
+            activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            activity.putExtra("token",str);
+            MainActivity.this.startActivity(activity);
+        }
 
+        if(item.getItemId() == R.id.about_us ){
+            Intent intent = new Intent(getApplicationContext(), AboutUs.class);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -86,13 +102,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
 
-
         listView = (ListView)findViewById(R.id.listView);//eklenen recipeler listelenmesi icin
         if(listView != null){
             listView.setOnItemClickListener(this);
-
         }
-
         addButton = findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,7 +139,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         intent.setClass(this, ViewRecipe.class);
         List<RecipeModel> list = adapter.getRecipeModelList();
         String idofItem = list.get(position).getId();
+        getIntentItems();
         intent.putExtra("idofItem",idofItem);
+        System.out.println("Header:  " + str);
+        intent.putExtra("token",str);
         // Or / And
         intent.putExtra("id", id);
         startActivity(intent);

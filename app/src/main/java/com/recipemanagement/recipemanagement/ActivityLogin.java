@@ -30,7 +30,10 @@ public class ActivityLogin extends AppCompatActivity {
     RelativeLayout relay1;
     EditText username, password;
     private String baseUrl = "https://recipe-management-service.herokuapp.com/login";
+    private String baseUrlDeviceId = "https://recipe-management-service.herokuapp.com/setToken/";
     Button btn;
+    static  String deviceId;
+    String s;
     Handler handler = new Handler();
     Runnable runnable = new Runnable() {
         @Override
@@ -64,9 +67,7 @@ public class ActivityLogin extends AppCompatActivity {
                     JSONObject eventObject = new JSONObject();
                     eventObject.put("username",username.getText().toString());
                     eventObject.put("password", password.getText().toString());
-
                     String json = eventObject.toString();
-
                     byte[] outputInBytes = json.getBytes("UTF-8");
                     OutputStream os = httpCon.getOutputStream();
                     os.write( outputInBytes );
@@ -74,13 +75,15 @@ public class ActivityLogin extends AppCompatActivity {
 
                     System.out.println(os.toString());
 
-                    String s = httpCon.getHeaderField("Authorization");
+                    s = httpCon.getHeaderField("Authorization");
                     int responseCode = httpCon.getResponseCode();
                     System.out.println("response code: " + responseCode);
                     System.out.println("aut code: " + s);
 
                     if(responseCode == 200){
                         Intent activity = new Intent(ActivityLogin.this, MainActivity.class);
+                        System.out.println("Token     "+s);
+                        activity.putExtra("token",s);
                         activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         ActivityLogin.this.startActivity(activity);
                     }
@@ -88,16 +91,43 @@ public class ActivityLogin extends AppCompatActivity {
                         BottomSheetDialog dialog = new BottomSheetDialog(ActivityLogin.this);
                         dialog.setContentView(R.layout.wrong_username_password);
                         dialog.show();
-
-
                     }
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+                Intent intent = new Intent();
+                FcmTokenRegistrationService fcmTokenRegistrationService = new FcmTokenRegistrationService();
+                fcmTokenRegistrationService.onHandleIntent(intent);
+                deviceId = fcmTokenRegistrationService.token;
+                System.out.println("Bu classda bu değer var: " + deviceId);
+                System.out.println("Token header icin: " + s);
+
+                try{
+                    URL url = new URL(baseUrlDeviceId+deviceId);
+                    HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+                    httpCon.setDoOutput(true);
+                    httpCon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded" );
+                    httpCon.setRequestMethod("PUT");
+                    httpCon.setRequestProperty("Authorization", s);
+                    int responseCode = httpCon.getResponseCode();
+                    System.out.println("Response code:" + responseCode);
+                    httpCon.connect();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+
             }
         });
+
+
+        sendFcmRegistrationToken();
+    }
+
+    private void sendFcmRegistrationToken() {
+        Intent intent = new Intent(this, FcmTokenRegistrationService.class);
+        startService(intent);
     }
 }

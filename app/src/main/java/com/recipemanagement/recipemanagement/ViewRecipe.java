@@ -34,6 +34,7 @@ public class ViewRecipe extends AppCompatActivity {
     private EditText recipeDetails;
     private Button deleteButton;
     private Button updateButton;
+    private Button likedButton;
     private ListView tagLists;
     private Bundle extra;
     private String id;
@@ -46,7 +47,10 @@ public class ViewRecipe extends AppCompatActivity {
     ArrayList<String> tags = new ArrayList<>();
     ArrayList<String> list = new ArrayList<>();
     int position=0;
+    String str = "";
     private final String baseUrlForDelete = "https://recipe-management-service.herokuapp.com/deleteRecipe/";
+    private final String baseUrlForLiked = "https://recipe-management-service.herokuapp.com/liked/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -68,8 +72,11 @@ public class ViewRecipe extends AppCompatActivity {
         updateButton = findViewById(R.id.updateButton);
         tagLists = findViewById(R.id.tagLists);
         extra = this.getIntent().getExtras();
+        likedButton = findViewById(R.id.liked);
 
-
+        Intent intent = getIntent();
+        str = (String) intent.getExtras().get("token");
+        System.out.println("Token86378162   "+ str);
 
         if(extra == null){
             id = null;
@@ -103,6 +110,25 @@ public class ViewRecipe extends AppCompatActivity {
                 Intent activity = new Intent(ViewRecipe.this, MainActivity.class);
                 activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(activity);
+            }
+        });
+
+        likedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { //delete recipe
+                System.out.println("ID"+id);
+                try{
+                    URL url = new URL(baseUrlForLiked+id);
+                    HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+                    httpCon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                    httpCon.setRequestProperty("Authorization",str);
+                    httpCon.setRequestMethod("GET");
+                    int responseCode = httpCon.getResponseCode();
+                    System.out.println("Response code:" + responseCode);
+                    httpCon.connect();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
             }
         });
 
