@@ -14,11 +14,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.recipemanagement.recipemanagement.utils.MultipartUtility;
+import com.recipemanagement.recipemanagement.utils.SaveSharedPreference;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,6 +30,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class RecipeActivity extends AppCompatActivity {
     private EditText name,details,tags;
@@ -98,34 +103,34 @@ public class RecipeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String value =(String) intent.getExtras().get("idofItem");
                 try {
-                    URL url = new URL(baseUrl + value);
-                    System.out.println(url.toString());
-                    HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
-                    httpCon.setDoOutput(true);
-                    httpCon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded" );
-                    httpCon.setRequestMethod("PUT");
-                    httpCon.setRequestProperty("Content-Type","application/json");
-                    JSONObject eventObject = new JSONObject();
+                    String tags = "";
+                    for (int i = 0; i < listItems.size(); i++){
+                        tags += listItems.get(i) + ",";
+                    }
+                    System.out.println("MULTİ 1");
+                    MultipartUtility multipart = new MultipartUtility("https://recipe-management-service.herokuapp.com/updateRecipe/" + value,"UTF-8",SaveSharedPreference.getToken(RecipeActivity.this));
+                    System.out.println("TOKE   " + SaveSharedPreference.getToken(RecipeActivity.this));
+                    //multipart.addHeaderField("Authorization",SaveSharedPreference.getToken(AddActivity.this) );
 
-                    eventObject.put("name",name.getText().toString());
-                    eventObject.put("details", details.getText().toString());
+                    multipart.addFormField("name",name.getText().toString());
+                    multipart.addFormField("details",details.getText().toString());
+                    multipart.addFormField("tags",tags);
 
+                    /*for(int i = 0; i < imagesEncodedList.size(); i++) {
+                        multipart.addFilePart("file", new File(imagesEncodedList.get(i)));
+                    }*/
 
-                    eventObject.put("tags", jsonTags);
-                    eventObject.put("photos",new JSONArray());
-                    String json = eventObject.toString();
+                    System.out.println("MULTİ 2");
 
-                    byte[] outputInBytes = json.getBytes("UTF-8");
-                    OutputStream os = httpCon.getOutputStream();
-                    os.write( outputInBytes );
-                    os.close();
+                    List<String> response = multipart.finish();
 
-                    int responseCode = httpCon.getResponseCode();
-                    System.out.println("response code: " + responseCode);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    System.out.println("SERVER REPLIED:");
+
+                    for (String line : response) {
+                        System.out.println(line);
+                    }
+                } catch (IOException ex) {
+                    System.err.println(ex);
                 }
                 Intent activity = new Intent(RecipeActivity.this, MainActivity.class);
                 activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

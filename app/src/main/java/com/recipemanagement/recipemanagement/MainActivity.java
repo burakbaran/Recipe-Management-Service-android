@@ -1,5 +1,6 @@
 package com.recipemanagement.recipemanagement;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,6 +22,7 @@ import android.widget.ListView;
 
 import com.recipemanagement.recipemanagement.models.Photo;
 import com.recipemanagement.recipemanagement.models.RecipeModel;
+import com.recipemanagement.recipemanagement.utils.SaveSharedPreference;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         MenuInflater menuInflater = getMenuInflater();
         //adding sections in menu bar
         menuInflater.inflate(R.menu.search_recipe,menu);
+        menuInflater.inflate(R.menu.logout,menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -78,7 +81,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
             startActivity(intent);
         }
+        if(item.getItemId() == R.id.logout){
+            SaveSharedPreference.setLoggedIn(getApplicationContext(), false);
+            SaveSharedPreference.setToken(getApplicationContext(),"token");
 
+            Intent activity = new Intent(MainActivity.this, ActivityLogin.class);
+            //activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this,android.R.anim.fade_in,android.R.anim.fade_out).toBundle();
+            MainActivity.this.startActivity(activity,options);
+        }
 
         return super.onOptionsItemSelected(item);
     }

@@ -1,5 +1,8 @@
 package com.recipemanagement.recipemanagement;
 
+import com.recipemanagement.recipemanagement.R.*;
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -57,7 +60,8 @@ public class ActivityLogin extends AppCompatActivity {
 
         if(SaveSharedPreference.getLoggedStatus(getApplicationContext())) {
             Intent activity = new Intent(ActivityLogin.this, MainActivity.class);
-            ActivityLogin.this.startActivity(activity);
+            Bundle options = ActivityOptions.makeCustomAnimation(ActivityLogin.this,android.R.anim.fade_in,android.R.anim.fade_out).toBundle();
+            ActivityLogin.this.startActivity(activity,options);
         }else{
             handler.postDelayed(runnable,2000);
         }
@@ -67,7 +71,8 @@ public class ActivityLogin extends AppCompatActivity {
             public void onClick(View v) {
                 Intent activity = new Intent(ActivityLogin.this, SignUpActivity.class);
                 activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                ActivityLogin.this.startActivity(activity);
+                Bundle options = ActivityOptions.makeCustomAnimation(ActivityLogin.this,android.R.anim.fade_in,android.R.anim.fade_out).toBundle();
+                ActivityLogin.this.startActivity(activity,options);
             }
         });
         btn.setOnClickListener(new View.OnClickListener() {
@@ -102,8 +107,9 @@ public class ActivityLogin extends AppCompatActivity {
                         SaveSharedPreference.setLoggedIn(getApplicationContext(), true);
                         SaveSharedPreference.setToken(getApplicationContext(), s);
                         Intent activity = new Intent(ActivityLogin.this, MainActivity.class);
-                        activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        ActivityLogin.this.startActivity(activity);
+                        //activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        Bundle options = ActivityOptions.makeCustomAnimation(ActivityLogin.this,android.R.anim.fade_in,android.R.anim.fade_out).toBundle();
+                        ActivityLogin.this.startActivity(activity,options);
                     }
                     else{
                         BottomSheetDialog dialog = new BottomSheetDialog(ActivityLogin.this);
@@ -120,5 +126,6 @@ public class ActivityLogin extends AppCompatActivity {
                 }
             }
         });
+
     }
 }

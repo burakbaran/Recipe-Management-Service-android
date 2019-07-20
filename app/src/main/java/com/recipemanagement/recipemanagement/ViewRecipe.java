@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
+import com.recipemanagement.recipemanagement.utils.SaveSharedPreference;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -102,6 +104,7 @@ public class ViewRecipe extends AppCompatActivity {
                     httpCon.setDoOutput(true);
                     httpCon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded" );
                     httpCon.setRequestMethod("DELETE");
+                    httpCon.setRequestProperty("Authorization", SaveSharedPreference.getToken(ViewRecipe.this));
                     int responseCode = httpCon.getResponseCode();
                     System.out.println("Response code:" + responseCode);
                     httpCon.connect();

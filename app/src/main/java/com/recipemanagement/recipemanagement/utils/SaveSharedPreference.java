@@ -38,6 +38,6 @@ public class SaveSharedPreference {
         return getPreferences(context).getBoolean(LOGGED_IN_PREF, false);
     }
     public static String getToken(Context context) {
-        return getPreferences(context).getString(MY_TOKEN, "asd");
+        return getPreferences(context).getString(MY_TOKEN, "tok");
     }
 }
