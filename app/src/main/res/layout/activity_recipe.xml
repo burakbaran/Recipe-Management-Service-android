@@ -72,17 +72,15 @@
                 android:id="@+id/addRecipe"
                 android:layout_width="150dp"
                 android:layout_height="50dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="72dp"
-                android:layout_marginEnd="140dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginStart="124dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/button_state"
                 android:text="Tarifi Güncelle"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tagLists"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toBottomOf="@+id/gridView_recipe" />
 
 
 
@@ -108,7 +106,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="Taarif Açıklaması"
+                android:text="Tarif Açıklaması"
                 app:layout_constraintBottom_toTopOf="@+id/recipeDescription"
                 app:layout_constraintEnd_toEndOf="@+id/recipeDescription"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -137,6 +135,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="44dp"
                 android:layout_marginEnd="8dp"
+                android:background="@drawable/button_state"
                 android:text="Etiket Ekle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recipeDescription" />
@@ -153,12 +152,45 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:visibility="visible"
-                app:layout_constraintBottom_toTopOf="@+id/deleteButton"
+                app:layout_constraintBottom_toTopOf="@+id/gridView_recipe"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.296"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView3"
                 app:layout_constraintVertical_bias="0.04" />
+
+
+            <RelativeLayout
+                android:id="@+id/gridView_recipe"
+                android:layout_width="368dp"
+                android:layout_height="358dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="40dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tagLists">
+
+
+                <ListView
+                    android:id="@+id/listViewPhoto_recipe"
+                    android:layout_width="395dp"
+                    android:layout_height="715dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:divider="#ffffff"
+                    android:dividerHeight="10dp"
+                    android:focusable="true"
+                    android:padding="10dp"
+                    android:scrollbars="vertical"
+                    android:nestedScrollingEnabled="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </RelativeLayout>
+
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

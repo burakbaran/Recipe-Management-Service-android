@@ -1,14 +1,24 @@
 package com.recipemanagement.recipemanagement.models;
 
-import org.json.JSONObject;
 
+import android.graphics.Bitmap;
+import android.media.Image;
+
+import java.io.File;
 import java.util.ArrayList;
 
 public class RecipeModel {
+
     private String name;
     private String id;
     private String details;
     private ArrayList<String> tags;
+
+    private ArrayList<Photo> photos;
+
+
+
+    public Bitmap imageBitmap;
 
     public String getId() {
         return id;
@@ -41,6 +51,24 @@ public class RecipeModel {
     public void setName(String name) {
         this.name = name;
     }
+
+    public ArrayList<Photo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(ArrayList<Photo> photos) {
+        this.photos = photos;
+    }
+
+    public Bitmap getImage() {
+        return imageBitmap;
+    }
+
+    public void setImage(Bitmap image) {
+        this.imageBitmap = image;
+    }
+
+
 
 
 }

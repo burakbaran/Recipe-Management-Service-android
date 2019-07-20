@@ -1,5 +1,8 @@
 package com.recipemanagement.recipemanagement;
 
+import com.recipemanagement.recipemanagement.R.*;
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -16,6 +19,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import com.recipemanagement.recipemanagement.utils.SaveSharedPreference;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,8 +35,8 @@ public class ActivityLogin extends AppCompatActivity {
     RelativeLayout relay1;
     EditText username, password;
     private String baseUrl = "https://recipe-management-service.herokuapp.com/login";
+    Button btn,btn_signUp;
     private String baseUrlDeviceId = "https://recipe-management-service.herokuapp.com/setToken/";
-    Button btn;
     static  String deviceId;
     String s;
     Handler handler = new Handler();
@@ -52,8 +57,27 @@ public class ActivityLogin extends AppCompatActivity {
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
         btn = findViewById(R.id.btn);
+        btn_signUp = findViewById(R.id.btn_signup);
 
-        handler.postDelayed(runnable,2000);
+
+
+        if(SaveSharedPreference.getLoggedStatus(getApplicationContext())) {
+            Intent activity = new Intent(ActivityLogin.this, MainActivity.class);
+            Bundle options = ActivityOptions.makeCustomAnimation(ActivityLogin.this,android.R.anim.fade_in,android.R.anim.fade_out).toBundle();
+            ActivityLogin.this.startActivity(activity,options);
+        }else{
+            handler.postDelayed(runnable,2000);
+        }
+
+        btn_signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent activity = new Intent(ActivityLogin.this, SignUpActivity.class);
+                activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                Bundle options = ActivityOptions.makeCustomAnimation(ActivityLogin.this,android.R.anim.fade_in,android.R.anim.fade_out).toBundle();
+                ActivityLogin.this.startActivity(activity,options);
+            }
+        });
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,7 +91,9 @@ public class ActivityLogin extends AppCompatActivity {
                     JSONObject eventObject = new JSONObject();
                     eventObject.put("username",username.getText().toString());
                     eventObject.put("password", password.getText().toString());
+
                     String json = eventObject.toString();
+
                     byte[] outputInBytes = json.getBytes("UTF-8");
                     OutputStream os = httpCon.getOutputStream();
                     os.write( outputInBytes );
@@ -75,23 +101,29 @@ public class ActivityLogin extends AppCompatActivity {
 
                     System.out.println(os.toString());
 
-                    s = httpCon.getHeaderField("Authorization");
+                    String s = httpCon.getHeaderField("Authorization");
                     int responseCode = httpCon.getResponseCode();
                     System.out.println("response code: " + responseCode);
                     System.out.println("aut code: " + s);
 
                     if(responseCode == 200){
+                        SaveSharedPreference.setLoggedIn(getApplicationContext(), true);
+                        SaveSharedPreference.setToken(getApplicationContext(), s);
                         Intent activity = new Intent(ActivityLogin.this, MainActivity.class);
-                        System.out.println("Token     "+s);
-                        activity.putExtra("token",s);
                         activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         ActivityLogin.this.startActivity(activity);
+                        //activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        Bundle options = ActivityOptions.makeCustomAnimation(ActivityLogin.this,android.R.anim.fade_in,android.R.anim.fade_out).toBundle();
+                        ActivityLogin.this.startActivity(activity,options);
                     }
                     else{
                         BottomSheetDialog dialog = new BottomSheetDialog(ActivityLogin.this);
                         dialog.setContentView(R.layout.wrong_username_password);
                         dialog.show();
+
+
                     }
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {

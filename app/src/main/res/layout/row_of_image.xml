@@ -19,7 +19,7 @@
             android:layout_height="120dp">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/imageViewPhotos"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:padding="4dp" />
@@ -32,7 +32,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/nameOfRecipe"
+                android:id="@+id/nameOfPhoto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
@@ -41,14 +41,6 @@
                 android:textSize="25dp"
                 android:textStyle="normal|italic" />
 
-            <TextView
-                android:id="@+id/detailsOfRecipe"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="5"
-                android:text="TextView"
-                android:textColor="@android:color/background_dark" />
         </LinearLayout>
     </LinearLayout>
 

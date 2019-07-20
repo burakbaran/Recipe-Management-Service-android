@@ -12,7 +12,10 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
+
+import com.recipemanagement.recipemanagement.utils.SaveSharedPreference;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,6 +37,7 @@ public class ViewRecipe extends AppCompatActivity {
     private EditText recipeDetails;
     private Button deleteButton;
     private Button updateButton;
+    private ImageButton shareButton;
     private Button likedButton;
     private ListView tagLists;
     private Bundle extra;
@@ -71,11 +75,17 @@ public class ViewRecipe extends AppCompatActivity {
         deleteButton = findViewById(R.id.deleteButton);
         updateButton = findViewById(R.id.updateButton);
         tagLists = findViewById(R.id.tagLists);
+        shareButton= findViewById(R.id.share_button);
         extra = this.getIntent().getExtras();
         likedButton = findViewById(R.id.liked);
 
-        Intent intent = getIntent();
-        str = (String) intent.getExtras().get("token");
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shareTextUrl();
+            }
+        });
+        str = SaveSharedPreference.getToken(ViewRecipe.this);
         System.out.println("Token86378162   "+ str);
 
         if(extra == null){
@@ -101,6 +111,7 @@ public class ViewRecipe extends AppCompatActivity {
                     httpCon.setDoOutput(true);
                     httpCon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded" );
                     httpCon.setRequestMethod("DELETE");
+                    httpCon.setRequestProperty("Authorization", SaveSharedPreference.getToken(ViewRecipe.this));
                     int responseCode = httpCon.getResponseCode();
                     System.out.println("Response code:" + responseCode);
                     httpCon.connect();
@@ -150,6 +161,20 @@ public class ViewRecipe extends AppCompatActivity {
         editText.setCursorVisible(false);
         editText.setKeyListener(null);
         editText.setBackgroundColor(Color.TRANSPARENT);
+    }
+
+    private void shareTextUrl() {
+        Intent share = new Intent(android.content.Intent.ACTION_SEND);
+        share.setType("text/plain");
+        share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        String value =(String) extra.get("idofItem");
+
+        // Add data to the intent, the receiving app will decide
+        // what to do with it.
+        share.putExtra(Intent.EXTRA_SUBJECT, "Title Of The Post");
+        share.putExtra(Intent.EXTRA_TEXT, "https://recipe-management-service-web.herokuapp.com/recipe.html?id=" + value);
+
+        startActivity(Intent.createChooser(share, "Tarifi Paylaş!"));
     }
 
     protected class JsonTask extends AsyncTask<Void, Void, JSONObject>
@@ -224,6 +249,8 @@ public class ViewRecipe extends AppCompatActivity {
                 }
                 setTitle(recipeName.getText().toString());
                 adapter.notifyDataSetChanged();
+
+                setTitle(recipeName.getText().toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }

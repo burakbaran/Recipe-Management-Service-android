@@ -49,6 +49,8 @@ public class RecipeArrayAdapter extends ArrayAdapter {
         name =(TextView)convertView.findViewById(R.id.nameOfRecipe);
         description =(TextView)convertView.findViewById(R.id.detailsOfRecipe);
 
+        im.setImageBitmap(recipeModelList.get(position).getImage());
+        im.setScaleType(ImageView.ScaleType.FIT_XY);
         name.setText(recipeModelList.get(position).getName());
         description.setText(recipeModelList.get(position).getDetails());
 

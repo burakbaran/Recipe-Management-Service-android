@@ -25,7 +25,6 @@
             android:src="@drawable/justlogo" />
         <RelativeLayout
             android:id="@+id/relay_layout1"
-            android:visibility="gone"
             android:layout_below="@id/image_ViewLogo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -38,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:fontFamily="sans-serif"
-                android:text="Giriş Yap"
+                android:text="Kayıt Ol!"
                 android:textColor="#000000"
                 android:textSize="30sp" />
 
@@ -51,6 +50,34 @@
                 android:layout_below="@id/tv_login">
 
                 <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif"
+                        android:text="İsim - Soyisim"
+                        android:textAllCaps="true"
+                        android:textColor="#000000"
+                        android:textSize="15sp" />
+
+                    <EditText
+                        android:id="@+id/fullname"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/et_bg"
+                        android:fontFamily="sans-serif"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:textSize="15sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="20dp"
                     android:layout_width="match_parent"
                     android:orientation="vertical"
                     android:layout_height="wrap_content">
@@ -107,41 +134,22 @@
 
 
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:orientation="vertical"
-                android:layout_below="@id/layout_1"
-                android:layout_height="wrap_content">
-                <Button
-                    android:id="@+id/btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/layout_1"
-                    android:layout_marginTop="50dp"
-                    android:background="@drawable/button_state"
-                    android:text="Giriş Yap"
-                    android:layout_centerHorizontal="true"
-                    android:paddingRight="70dp"
-                    android:paddingLeft="70dp"
-                    android:textAllCaps="false"
-                    android:textSize="20sp"
-                    android:textColor="#000000" />
 
-                <Button
-                    android:id="@+id/btn_signup"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/layout_1"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/button_state"
-                    android:paddingLeft="70dp"
-                    android:paddingRight="70dp"
-                    android:text="Kayıt ol"
-                    android:textAllCaps="false"
-                    android:textColor="#000000"
-                    android:textSize="20sp" />
-            </LinearLayout>
+            <Button
+                android:id="@+id/btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/layout_1"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/button_state"
+                android:text="Kayıt Ol!"
+                android:layout_centerHorizontal="true"
+                android:paddingRight="70dp"
+                android:paddingLeft="70dp"
+                android:textAllCaps="false"
+                android:textSize="20sp"
+                android:textColor="#000000" />
+
 
         </RelativeLayout>
 

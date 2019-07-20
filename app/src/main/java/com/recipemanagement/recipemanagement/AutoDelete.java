@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.recipemanagement.recipemanagement.utils.SaveSharedPreference;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,8 +36,7 @@ public class AutoDelete extends AppCompatActivity {
         submit = findViewById(R.id.submit);
         System.out.println("Keyword" + value + "bitti");
         Intent intent = getIntent();
-        str = (String) intent.getExtras().get("token");
-        System.out.println("Token Burak senin ben amık" + str);
+        str = SaveSharedPreference.getToken(AutoDelete.this);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RecipeManagement</string>
     <string name="RecipeManagement_PREF">com.recipemanagement.recipemanagement.recipe_pref</string>
     <string name="RecipeManagement_TOKEN">com.recipemanagement.recipemanagement.recipe_token</string>
+    <string name="app_name">Yemek Tarifleri</string>
 </resources>
