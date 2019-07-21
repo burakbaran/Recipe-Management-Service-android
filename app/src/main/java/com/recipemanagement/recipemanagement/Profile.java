@@ -2,6 +2,7 @@ package com.recipemanagement.recipemanagement;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -18,12 +19,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import com.recipemanagement.recipemanagement.utils.SaveSharedPreference;
-
 
 
 import com.recipemanagement.recipemanagement.models.Photo;
 import com.recipemanagement.recipemanagement.models.RecipeModel;
+import com.recipemanagement.recipemanagement.utils.SaveSharedPreference;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,85 +39,33 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import com.recipemanagement.recipemanagement.utils.SaveSharedPreference;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
-    private final String baseUrl = "https://recipe-management-service.herokuapp.com/getRecipes";
+
+
+public class Profile extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private ListView listView;
     private Toolbar toolbar;
     private ImageView imageView;
+    private String flag = "";
 
-    FloatingActionButton addButton;
 
     private RecipeArrayAdapter adapter;
     ArrayList<String> listItems=new ArrayList<String>();
 
     ArrayList<String> itemIds=new ArrayList<String>();
-    ArrayList<String> details =new ArrayList<String>();
-    ArrayList<String> taglist = new ArrayList<String>();
+
     private static SwipeRefreshLayout pullToRefresh;
 
     private static HashMap<String,Bitmap> cacheForUrls = new HashMap<String,Bitmap>(); //cache for fewer request
-   // TODO: silinen resim cacheden silinmeli
-
-
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        //adding sections in menu bar
-        menuInflater.inflate(R.menu.profile,menu);
-        menuInflater.inflate(R.menu.search_recipe,menu);
-        menuInflater.inflate(R.menu.auto_delete,menu);
-        menuInflater.inflate(R.menu.about_us,menu);
-        menuInflater.inflate(R.menu.logout,menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-
-    //move on the selected activity
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if(item.getItemId() == R.id.profile ){
-            Intent intent = new Intent(getApplicationContext(), Profile.class);
-            startActivity(intent);
-        }
-
-
-        if(item.getItemId() == R.id.search_recipe){
-            Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
-            startActivity(intent);
-        }
-        if(item.getItemId() == R.id.logout){
-            SaveSharedPreference.setLoggedIn(getApplicationContext(), false);
-            SaveSharedPreference.setToken(getApplicationContext(),"token");
-            Intent activity = new Intent(MainActivity.this, ActivityLogin.class);
-            //activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            Bundle options = ActivityOptions.makeCustomAnimation(MainActivity.this,android.R.anim.fade_in,android.R.anim.fade_out).toBundle();
-            MainActivity.this.startActivity(activity,options);
-        }
-
-        if(item.getItemId() == R.id.auto_delete){
-
-            Intent activity = new Intent(MainActivity.this, AutoDelete.class);
-            activity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            MainActivity.this.startActivity(activity);
-        }
-
-
-        if(item.getItemId() == R.id.about_us ){
-            Intent intent = new Intent(getApplicationContext(), AboutUs.class);
-            startActivity(intent);
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Yemek Tarifleri");
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_profile);
+        flag = SaveSharedPreference.getToken(Profile.this);
+
 
         toolbar = (Toolbar) findViewById(R.id.CustomToolBar);
         setSupportActionBar(toolbar);
@@ -135,15 +83,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         }
 
-        addButton = findViewById(R.id.addButton);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this,AddActivity.class);
-                startActivity(intent);
-            }
-        });
 
         pullToRefresh = findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -179,13 +118,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         protected ArrayList<JSONObject> doInBackground(Void... params)
         {
 
-            String str="https://recipe-management-service.herokuapp.com/getRecipes";
+            String str="https://recipe-management-service.herokuapp.com/getMyRecipes";
             BufferedReader bufferedReader = null;
             try {
                 System.out.println("objects fecthing");
                 URL getEventsUrl = new URL(str);
 
                 HttpURLConnection httpURLConnection = (HttpURLConnection) getEventsUrl.openConnection();
+                httpURLConnection.setRequestProperty("Authorization", flag);
                 InputStream inputStream = httpURLConnection.getInputStream();
                 bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
                 StringBuilder builder = new StringBuilder();
@@ -288,10 +228,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     e.printStackTrace();
                 }
             }
-
-
         }
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
