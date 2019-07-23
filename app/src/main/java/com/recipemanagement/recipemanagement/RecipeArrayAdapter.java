@@ -44,7 +44,7 @@ public class RecipeArrayAdapter extends ArrayAdapter {
         ImageView im;
         TextView name;
         TextView description;
-
+        System.out.println("SOUT ATILABİLİYORMUŞ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         im = (ImageView)convertView.findViewById(R.id.imageView);
         name =(TextView)convertView.findViewById(R.id.nameOfRecipe);
         description =(TextView)convertView.findViewById(R.id.detailsOfRecipe);

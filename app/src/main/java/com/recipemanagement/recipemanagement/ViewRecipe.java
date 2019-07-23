@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 
 import com.recipemanagement.recipemanagement.models.Photo;
 import com.recipemanagement.recipemanagement.models.RecipeModel;
@@ -39,7 +40,7 @@ import java.util.ArrayList;
 
 public class ViewRecipe extends AppCompatActivity {
 
-
+    private ScrollView scrollView;
     private EditText recipeName;
     private EditText recipeDetails;
     private Button deleteButton;
@@ -118,6 +119,7 @@ public class ViewRecipe extends AppCompatActivity {
         gridView2R = findViewById(R.id.gridView2R);
         gridView3R = findViewById(R.id.gridView3R);
 
+
         if(extra == null){
             id = null;
         }else {
@@ -131,6 +133,7 @@ public class ViewRecipe extends AppCompatActivity {
 
         new JsonTask().execute();
         adapter.notifyDataSetChanged();
+
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { //delete recipe
@@ -287,11 +290,13 @@ public class ViewRecipe extends AppCompatActivity {
 
                     imageBitmapsForIngredients.add(showPhotos(photosIng.get(i)));
                 }
-                imageAdapterForIngredients = new ImageBitmapAdapter(ViewRecipe.this,R.layout.row_of_image,imageBitmapsForIngredients);
-                imageAdapterForIngredients.notifyDataSetChanged();
                 if(photosIng.size() > 0){
                     gridViewR.setVisibility(View.VISIBLE);
                 }
+                imageAdapterForIngredients = new ImageBitmapAdapter(ViewRecipe.this,R.layout.row_of_image,imageBitmapsForIngredients);
+                imageAdapterForIngredients.notifyDataSetChanged();
+                listViewPhotoR.setAdapter(imageAdapterForIngredients);
+
 
                 JSONArray jsonPhotosCook = response.getJSONArray("cookingSteps");
                 ArrayList<Photo> photosCook = new ArrayList<>();
@@ -308,12 +313,13 @@ public class ViewRecipe extends AppCompatActivity {
 
                     imageBitmapsForSteps.add(showPhotos(photosCook.get(i)));
                 }
-                imageAdapterForSteps = new ImageBitmapAdapter(ViewRecipe.this,R.layout.row_of_image,imageBitmapsForSteps);
-                imageAdapterForSteps.notifyDataSetChanged();
-
                 if(photosCook.size() > 0){
                     gridView2R.setVisibility(View.VISIBLE);
                 }
+                imageAdapterForSteps = new ImageBitmapAdapter(ViewRecipe.this,R.layout.row_of_image,imageBitmapsForSteps);
+                imageAdapterForSteps.notifyDataSetChanged();
+                listViewPhoto2R.setAdapter(imageAdapterForSteps);
+
 
                 JSONArray jsonPhotos = response.getJSONArray("photos");
                 ArrayList<Photo> photos = new ArrayList<>();
@@ -329,14 +335,17 @@ public class ViewRecipe extends AppCompatActivity {
                 for (int i = 0; i < photos.size(); i++ ){
                     imageBitmapForFinal.add(showPhotos(photos.get(i)));
                 }
-                imageAdapterForFinal = new ImageBitmapAdapter(ViewRecipe.this,R.layout.row_of_image,imageBitmapForFinal);
-                imageAdapterForFinal.notifyDataSetChanged();
-
-                System.out.println(imageBitmapForFinal.get(0) + "         DOLU OLMASI LAZIM ARTIK AQ ");
                 if(photos.size() > 0){
                     System.out.println("GİRDİ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                     gridView3R.setVisibility(View.VISIBLE);
                 }
+                imageAdapterForFinal = new ImageBitmapAdapter(ViewRecipe.this,R.layout.row_of_image,imageBitmapForFinal);
+                imageAdapterForFinal.notifyDataSetChanged();
+                listViewPhoto3R.setAdapter(imageAdapterForFinal);
+
+
+                System.out.println(imageBitmapForFinal.get(0) + "         DOLU OLMASI LAZIM ARTIK AQ ");
+
 
 
                 for (int i = 0; i < myJson.length(); i++) {

@@ -3,6 +3,7 @@ package com.recipemanagement.recipemanagement;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +25,7 @@ import java.net.URL;
 public class AutoDelete extends AppCompatActivity {
     private EditText ndays;
     private Button submit;
+    private Toolbar toolbar;
     int value =0;
     String str= "";
 
@@ -32,6 +34,10 @@ public class AutoDelete extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auto_delete);
+        toolbar = findViewById(R.id.CustomBarr);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("    Yemek Tarifleri");
+        getSupportActionBar().setIcon(R.drawable.asdf);
 
         submit = findViewById(R.id.submit);
         System.out.println("Keyword" + value + "bitti");

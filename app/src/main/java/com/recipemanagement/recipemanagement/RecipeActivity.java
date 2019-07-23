@@ -123,8 +123,6 @@ public class RecipeActivity extends AppCompatActivity {
                     multipart.addFormField("name",name.getText().toString());
                     multipart.addFormField("details",details.getText().toString());
                     multipart.addFormField("tags",tags);
-                    multipart.addFilePart("file", new File(imageFilePath2));
-
 
                     System.out.println("MULTİ 2");
 

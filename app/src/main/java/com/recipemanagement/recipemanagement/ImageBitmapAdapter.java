@@ -20,6 +20,10 @@ public class ImageBitmapAdapter  extends ArrayAdapter {
 
     public ImageBitmapAdapter(Context context, int resource, List<Bitmap> objects) {
         super(context, resource, objects);
+        System.out.println("BURAYA GİRİYO MUééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééééé");
+        for (int i = 0; i < objects.size(); i++){
+            System.out.println(objects.get(i) + " ONJECTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+        }
         imageList = objects;
         this.resource = resource;
         layoutInflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -35,6 +39,7 @@ public class ImageBitmapAdapter  extends ArrayAdapter {
         ImageView im;
         im = (ImageView) convertView.findViewById(R.id.imageViewPhotos);
         System.out.println("POSITION:          " + imageList.get(position));
+
         im.setImageBitmap(imageList.get(position));
         im.setScaleType(ImageView.ScaleType.FIT_XY);
 
