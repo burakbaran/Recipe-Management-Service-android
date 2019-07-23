@@ -13,9 +13,7 @@ public class RecipeModel {
     private String id;
     private String details;
     private ArrayList<String> tags;
-
     private ArrayList<Photo> photos;
-
 
 
     public Bitmap imageBitmap;

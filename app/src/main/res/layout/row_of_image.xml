@@ -31,16 +31,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/nameOfPhoto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:text="TextView"
-                android:textColor="@android:color/background_dark"
-                android:textSize="25dp"
-                android:textStyle="normal|italic" />
-
         </LinearLayout>
     </LinearLayout>
 

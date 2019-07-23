@@ -111,22 +111,20 @@ public class RecipeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String value =(String) intent.getExtras().get("idofItem");
                 try {
+                    final String imageFilePath2 = "storage/emulated/0/DCIM/Camera/IMG_20190709_142108.jpg";
                     String tags = "";
                     for (int i = 0; i < listItems.size(); i++){
                         tags += listItems.get(i) + ",";
                     }
                     System.out.println("MULTİ 1");
-                    MultipartUtility multipart = new MultipartUtility("https://recipe-management-service.herokuapp.com/updateRecipe/" + value,"UTF-8",SaveSharedPreference.getToken(RecipeActivity.this));
+                    MultipartUtility multipart = new MultipartUtility("https://recipe-management-service.herokuapp.com/updateRecipe/" + value,"UTF-8",SaveSharedPreference.getToken(RecipeActivity.this),"PUT");
                     System.out.println("TOKE   " + SaveSharedPreference.getToken(RecipeActivity.this));
-                    //multipart.addHeaderField("Authorization",SaveSharedPreference.getToken(AddActivity.this) );
 
                     multipart.addFormField("name",name.getText().toString());
                     multipart.addFormField("details",details.getText().toString());
                     multipart.addFormField("tags",tags);
+                    multipart.addFilePart("file", new File(imageFilePath2));
 
-                    /*for(int i = 0; i < imagesEncodedList.size(); i++) {
-                        multipart.addFilePart("file", new File(imagesEncodedList.get(i)));
-                    }*/
 
                     System.out.println("MULTİ 2");
 

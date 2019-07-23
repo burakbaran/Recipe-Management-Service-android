@@ -36,7 +36,7 @@ public class MultipartUtility {
      * @param charset
      * @throws IOException
      */
-    public MultipartUtility(String requestURL, String charset,String token)
+    public MultipartUtility(String requestURL, String charset,String token,String type)
             throws IOException {
         this.charset = charset;
 
@@ -45,6 +45,7 @@ public class MultipartUtility {
 
         URL url = new URL(requestURL);
         httpConn = (HttpURLConnection) url.openConnection();
+        httpConn.setRequestMethod(type);
         httpConn.setUseCaches(false);
         httpConn.setDoOutput(true); // indicates POST method
         httpConn.setDoInput(true);

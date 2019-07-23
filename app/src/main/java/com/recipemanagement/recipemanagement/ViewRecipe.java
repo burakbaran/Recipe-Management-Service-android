@@ -1,7 +1,10 @@
 package com.recipemanagement.recipemanagement;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +17,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
+import com.recipemanagement.recipemanagement.models.Photo;
+import com.recipemanagement.recipemanagement.models.RecipeModel;
 import com.recipemanagement.recipemanagement.utils.SaveSharedPreference;
 
 import org.json.JSONArray;
@@ -27,6 +33,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -38,11 +45,26 @@ public class ViewRecipe extends AppCompatActivity {
     private Button deleteButton;
     private Button updateButton;
     private ImageButton shareButton;
-    private Button likedButton;
+    private ImageButton likedButton;
     private ListView tagLists;
+    private ListView listViewPhotoR;
+    private ListView listViewPhoto2R;
+    private ListView listViewPhoto3R;
+
+    private RelativeLayout gridViewR;
+    private RelativeLayout gridView2R;
+    private RelativeLayout gridView3R;
+
+
+
     private Bundle extra;
     private String id;
     private Toolbar toolbar;
+
+    private ImageBitmapAdapter imageAdapterForIngredients;
+    private ImageBitmapAdapter imageAdapterForSteps;
+    private ImageBitmapAdapter imageAdapterForFinal;
+
     //private Intent intent;
     ArrayAdapter adapter;
     //delete calısıyor
@@ -87,6 +109,14 @@ public class ViewRecipe extends AppCompatActivity {
         });
         str = SaveSharedPreference.getToken(ViewRecipe.this);
         System.out.println("Token86378162   "+ str);
+
+        listViewPhotoR = findViewById(R.id.listViewPhotoR);
+        listViewPhoto2R = findViewById(R.id.listViewPhoto2R);
+        listViewPhoto3R = findViewById(R.id.listViewPhoto3R);
+
+        gridViewR = findViewById(R.id.gridViewR);
+        gridView2R = findViewById(R.id.gridView2R);
+        gridView3R = findViewById(R.id.gridView3R);
 
         if(extra == null){
             id = null;
@@ -227,35 +257,118 @@ public class ViewRecipe extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(JSONObject response)
-        {
-            if(response != null)
-            {
+        protected void onPostExecute(JSONObject response) {
+            if (response != null) {
                 try {
-                    Log.e("App", "Success: "  );
+                    Log.e("App", "Success: ");
                 } catch (Exception ex) {
                     Log.e("App", "Failure", ex);
                 }
             }
             try {
-
                 recipeName.setText(response.getString("name"));
                 recipeDetails.setText(response.getString("details"));
-
                 JSONArray myJson = response.getJSONArray("tags");
 
-                for(int i = 0; i < myJson.length(); i++) {
+                JSONArray jsonPhotosIng = response.getJSONArray("ingredients");
+                ArrayList<Photo> photosIng = new ArrayList<>();
+
+                for (int k = 0; k < jsonPhotosIng.length(); k++) {
+                    Photo p = new Photo();
+                    JSONObject jsonPhoto = (JSONObject) jsonPhotosIng.get(k);
+                    p.setId(jsonPhoto.getString("id"));
+                    p.setPhotoLink(jsonPhoto.getString("photoLink"));
+                    p.setCloudinaryId(jsonPhoto.getString("publicCloudinaryId"));
+                    photosIng.add(p);
+                }
+                ArrayList<Bitmap> imageBitmapsForIngredients = new ArrayList<>();
+
+                for (int i = 0; i < photosIng.size(); i++ ){
+
+                    imageBitmapsForIngredients.add(showPhotos(photosIng.get(i)));
+                }
+                imageAdapterForIngredients = new ImageBitmapAdapter(ViewRecipe.this,R.layout.row_of_image,imageBitmapsForIngredients);
+                imageAdapterForIngredients.notifyDataSetChanged();
+                if(photosIng.size() > 0){
+                    gridViewR.setVisibility(View.VISIBLE);
+                }
+
+                JSONArray jsonPhotosCook = response.getJSONArray("cookingSteps");
+                ArrayList<Photo> photosCook = new ArrayList<>();
+                for (int k = 0; k < jsonPhotosCook.length(); k++) {
+                    Photo p = new Photo();
+                    JSONObject jsonPhoto = (JSONObject) jsonPhotosCook.get(k);
+                    p.setId(jsonPhoto.getString("id"));
+                    p.setPhotoLink(jsonPhoto.getString("photoLink"));
+                    p.setCloudinaryId(jsonPhoto.getString("publicCloudinaryId"));
+                    photosCook.add(p);
+                }
+                ArrayList<Bitmap> imageBitmapsForSteps = new ArrayList<>();
+                for (int i = 0; i < photosCook.size(); i++ ){
+
+                    imageBitmapsForSteps.add(showPhotos(photosCook.get(i)));
+                }
+                imageAdapterForSteps = new ImageBitmapAdapter(ViewRecipe.this,R.layout.row_of_image,imageBitmapsForSteps);
+                imageAdapterForSteps.notifyDataSetChanged();
+
+                if(photosCook.size() > 0){
+                    gridView2R.setVisibility(View.VISIBLE);
+                }
+
+                JSONArray jsonPhotos = response.getJSONArray("photos");
+                ArrayList<Photo> photos = new ArrayList<>();
+                for (int k = 0; k < jsonPhotos.length(); k++) {
+                    Photo p = new Photo();
+                    JSONObject jsonPhoto = (JSONObject) jsonPhotos.get(k);
+                    p.setId(jsonPhoto.getString("id"));
+                    p.setPhotoLink(jsonPhoto.getString("photoLink"));
+                    p.setCloudinaryId(jsonPhoto.getString("publicCloudinaryId"));
+                    photos.add(p);
+                }
+                ArrayList<Bitmap> imageBitmapForFinal = new ArrayList<>();
+                for (int i = 0; i < photos.size(); i++ ){
+                    imageBitmapForFinal.add(showPhotos(photos.get(i)));
+                }
+                imageAdapterForFinal = new ImageBitmapAdapter(ViewRecipe.this,R.layout.row_of_image,imageBitmapForFinal);
+                imageAdapterForFinal.notifyDataSetChanged();
+
+                System.out.println(imageBitmapForFinal.get(0) + "         DOLU OLMASI LAZIM ARTIK AQ ");
+                if(photos.size() > 0){
+                    System.out.println("GİRDİ!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                    gridView3R.setVisibility(View.VISIBLE);
+                }
+
+
+                for (int i = 0; i < myJson.length(); i++) {
                     tags.add(myJson.get(i).toString());
                 }
                 setTitle(recipeName.getText().toString());
                 adapter.notifyDataSetChanged();
 
                 setTitle(recipeName.getText().toString());
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+    }
 
+    public Bitmap showPhotos(Photo p){
+        URL url = null;
+        try {
+            url = new URL(p.getPhotoLink());
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        Bitmap bmp = null;
+        try {
+            bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("BITMAP:                 " + bmp);
+        return bmp;
     }
 
 }

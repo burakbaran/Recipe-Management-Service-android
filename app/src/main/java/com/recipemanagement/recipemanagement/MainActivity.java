@@ -1,11 +1,14 @@
 package com.recipemanagement.recipemanagement;
 
+import android.Manifest;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -126,6 +129,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         imageView = findViewById(R.id.imageView);
 
+        try {
+            if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, 1);
+            } else {
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
 
@@ -269,7 +281,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             try {
                                 if(cacheForUrls.get(p.getPhotoLink()) == null){
                                     bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                                    System.out.println("girdii");
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();
